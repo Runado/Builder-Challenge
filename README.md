@@ -20,7 +20,7 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 Para a resolução do desafio foi provisionado uma máquina virtual com o terraform
 
-<h1> provider "aws" {
+<h1> provider "aws" { <\n>
   region = "us-east-1"
   profile = "default"
 }
