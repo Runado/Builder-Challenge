@@ -18,7 +18,7 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 ## **Resolução**
 
-Para a resolução do desafio foi provisionado uma máquina virtual com o terraform
+Para a resolução do desafio foi provisionado uma máquina com recursos básicos.
 
 <h4> provider "aws" { <\n>
   region = "us-east-1"
@@ -35,3 +35,83 @@ tags = {
 }
 }
 </h4>
+
+Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual
+
+<h4>
+resource "aws_security_group" "security-group-for-builders" {
+    name = "habilitar-acesso-remoto"
+    description = "Habilitar o acesso remoto "
+    vpc_id = "vpc-00cbad41c1b2cd6f0 "
+
+    ingress {
+        description = "Allow inbound traffic"
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        name = "habilitar_ssh"
+    }
+}
+  </h4>
+  
+ A Chave KMS foi criada para criptografar os objetos do bucket
+  
+  <h4> 
+    resource "aws_kms_key" "mykey" {
+  description             = "This key is used to encrypt bucket objects"
+  deletion_window_in_days = 10
+}
+  </h4>
+  
+  Após criar a chave criei o bucket
+  
+  <h4>
+    
+ 
+resource "aws_s3_bucket" "builder" {
+        bucket = "builders-challenge"
+        acl = "private"
+
+        lifecycle_rule {
+	id = "archive"
+	enabled = true
+	transition {
+	days = 30
+	storage_class = "Standard_IA"
+}
+	transition {
+	days = 30
+	storage_class = "STANDARD_IA"
+	}
+	
+}
+	versioning {
+	enabled = true
+	}
+	tags = {
+	  Enviroment: "QA"
+	}
+
+}
+  </h4>
+  
+Para finalizar o provisionamento a máquina foi implementado a criptografia para proteger os objetos do bucket, utilizando a chave KMS criada anteriormente.
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" {
+  bucket = aws_s3_bucket.builder.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = aws_kms_key.mykey.arn
+      sse_algorithm     = "aws:kms"
+    }
+  }
+  
+  
+
+  
+ 
