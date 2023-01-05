@@ -16,7 +16,7 @@ Para a tecnologia que você selecionar, você deve criar um IAC que irá realiza
 Nesta máquina criada, você deve criar uma aplicação (na linguagem que você se sentir confortável) que irá ser executado a cada hora, e irá criar um arquivo de texto contendo a hora de criação como conteúdo, e realizar o upload deste arquivo criado para o bucket.
 
 
-## **Resolução**
+
 
 <h2>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h2>
 
