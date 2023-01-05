@@ -38,12 +38,11 @@ tags = {
 
 Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual
 
-<h4>
+
 resource "aws_security_group" "security-group-for-builders" {
     name = "habilitar-acesso-remoto"
     description = "Habilitar o acesso remoto "
     vpc_id = "vpc-00cbad41c1b2cd6f0 "
-
     ingress {
         description = "Allow inbound traffic"
         from_port = 22
@@ -51,13 +50,12 @@ resource "aws_security_group" "security-group-for-builders" {
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
-
     tags = {
         name = "habilitar_ssh"
     }
 }
-  </h4>
-  
+
+	
  A Chave KMS foi criada para criptografar os objetos do bucket
   
   <h4> 
