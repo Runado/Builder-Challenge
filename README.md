@@ -73,14 +73,12 @@ resource "aws_security_group" "security-group-for-builders" {
 resource "aws_s3_bucket" "builder" {
         bucket = "builders-challenge"
         acl = "private"
-
         lifecycle_rule {
 	id = "archive"
 	enabled = true
 	transition {
 	days = 30
-	storage_class = "Standard_IA"
-}
+	storage_class = "Standard_IA"}
 	transition {
 	days = 30
 	storage_class = "STANDARD_IA"
