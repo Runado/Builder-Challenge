@@ -165,7 +165,7 @@ curl -X PUT -T "${file}" \ <br>
   -H "Authorization: AWS ${s3Key}:${signature}" \ <br>
   https://${bucket}.s3-us-east-2.amazonaws.com/${file} <br>
 	
-	<img src="https://1drv.ms/u/s!AmI54ft7P6O7tSy6gqA6hFQ45tMz?e=6H24DG">
+	<img src="https://uploaddeimagens.com.br/images/004/285/226/original/Python_Output.png?1672893301">
 	
 
 	
