@@ -99,8 +99,80 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" { <b
       sse_algorithm     = "aws:kms" <br>
     } <br>
   }
-  
-  
+
+## ** Para coletar a hora da máquina depois salvar em um arquivo e enviar para o S3 Bucket foi feito um Script em Python porém funciona apenas localmente na máquina do usuário e apenas enquanto o processo estiver em standby no computador em que está executando o Script. 
+
+<h2> Importando as bibliotecas e realizando o acesso SSH </h2>
+
+import paramiko <br>
+import time <br>
+import boto3 <br> 
+while True: <br>
+        aws = "44.211.218.25" #IP do Servidor AWS <br>
+        k = paramiko.RSAKey.from_private_key_file("Caminho da Chave PEM ou PPK") <br>
+        ssh = paramiko.SSHClient() <br>
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) <br>
+        ssh.connect(hostname=aws, username="ubuntu", port=22, pkey = k ) <br>
+        print ("Conexão bem-sucedida") <br>
+
+<h2> Após a conexão ser estabelecida enviei o comando que grava a saída do "date" no arquivo horario.txt e depois eu exibo o arquivo para gerar uma saída e então ficar salvo na saída "stdout" após isso a saída é gravada em uma variavel e depois é gerado um arquivo saida.txt com o output do comando date na máquina local.</h2>
+	stdin, stdout, stderr = ssh.exec_command("date >> horario.txt && cat horario.txt") // gera o arquivo horario.txt e depois mostra o conteúdo do arquivo <br>
+        print("\nComando Enviado com Sucesso!")<br>
+        stdin.close() //assim que fechar o input a saída de tudo que foi feito na máquina AWS ficará salvo no stdout.<br>
+        saida = stdout.read().decode("utf-8") // gravando a saída em uma variável<br>
+        print(saida)<br>
+        ssh.close() // fechando a conexão ssh<br>
+        
+	with open("saida.txt", "w") as arquivo: // gerando um arquivo na máquina local e gravando com a saída capturada ( Horário da máquina da AWS)<br>
+                arquivo.write(saida)<br>
+<h2> Neste script o arquivo que foi enviado para o bucket não foi o que está na máquina AWS e sim o que foi gerado localmente apartir da sáida gravada, após isso foi só necessário utilizar biblioteca boto3 para enviar o arquivo local saida.txt e conferir se o bucket foi criado corretamente e se o arquivo está lá.
+	
+	
+	s3_client = boto3.client('s3') <br>
+        s3 = boto3.resource('s3')<br>
+        my_bucket = s3.Bucket("builders-challenge")<br>
+        response = s3_client.upload_file("saida.txt","builders-challenge","saida.txt") // enviando o arquivo <br>
+        for bucket in s3.buckets.all():<br>
+                print("Nome do Bucket: "+bucket.name)   // verificando os buckets existentes<br>
+        for file in my_bucket.objects.all():<br>
+                print("Arquivo: " + file.key)  // verificando se o arquivo está lá <br>
+        print("\nA Rotina será executada novamente em 60 minutos")<br>
+        time.sleep(60*60) // todo o código está em um Loop Infinito então o programa foi congelado e após 1 hora ele irá executar novamente coletando o horário e salvando na máquina local e enviando o arquivo pro bucket<br> 
+
+<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	## **  Tentativa que não deu certo 
+	
+<h2> Tentei cumprir esse desafio utilizando python, shell script e crontab mas sem sucesso devido a um erro que não consegui resolver em tempo ágil, a idéia era apartir de um programa em python acessar a máquina e configurar o crontab para a cada 1 hora,  gravar a saida do comando "date" em um arquivo "horario.txt" depois configurar outra rotina para enviar o arquivo horário.txt através de um shell script que iria se conectar com a API rest da AWS e realizar o upload a cada 1 hora também, deixei abaixo o código fonte do shell script, por algum motivo a execução do shell script não terminava e também não realizava o upload.
+
+
+file=horario.txt <br>
+bucket=builders-challenge <br>
+resource="/${bucket}/${file}" <br>
+contentType="application/x-compressed-tar" <br>
+dateValue=`date -R` <br>
+stringToSign="PUT\n\n${contentType}\n${dateValue}\n${resource}" <br>
+s3Key="CHAVE PUBLICA AWS" <br>
+s3Secret="CHAVE PRIVADA AWS" <br>
+signature=`echo -en ${stringToSign} | openssl sha1 -hmac ${s3Secret} -binary | base64` <br>
+curl -X PUT -T "${file}" \ <br>
+  -H "Host: ${bucket}.s3.amazonaws.com" \ <br>
+  -H "Date: ${dateValue}" \ <br>
+  -H "Content-Type: ${contentType}" \ <br>
+  -H "Authorization: AWS ${s3Key}:${signature}" \ <br>
+  https://${bucket}.s3-us-east-2.amazonaws.com/${file} <br>
+	
+	
+
+	
+	
+
+
+	
 
   
  
