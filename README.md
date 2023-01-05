@@ -18,7 +18,7 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 ## **Resolução**
 
-<h1>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h1>
+<h2>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h2>
 
 provider "aws" { <\n>
   region = "us-east-1"
@@ -35,7 +35,7 @@ tags = {
 
 
 
-<h1>Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual</h1>
+<h2>Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual</h2>
 
 
 
@@ -56,7 +56,7 @@ resource "aws_security_group" "security-group-for-builders" {
 }
 
 	
- <h1>A Chave KMS foi criada para criptografar os objetos do bucket</h1>
+ <h2>A Chave KMS foi criada para criptografar os objetos do bucket</h2>
   
 
   resource "aws_kms_key" "mykey" {
@@ -65,7 +65,7 @@ resource "aws_security_group" "security-group-for-builders" {
 }
 
   
-  <h1>Após criar a chave criei o bucket</h1>
+  <h2>Após criar a chave criei o bucket</h2>
   
   
     
@@ -93,9 +93,9 @@ resource "aws_s3_bucket" "builder" {
 	}
 
 }
-  </h4>
+
   
-Para finalizar o provisionamento a máquina foi implementado a criptografia para proteger os objetos do bucket, utilizando a chave KMS criada anteriormente.
+<h2>Para finalizar o provisionamento a máquina foi implementado a criptografia para proteger os objetos do bucket, utilizando a chave KMS criada anteriormente.</h2>
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" {
   bucket = aws_s3_bucket.builder.bucket
