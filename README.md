@@ -100,7 +100,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" { <b
     } <br>
   }
 
-## ** Para coletar a hora da máquina depois salvar em um arquivo e enviar para o S3 Bucket foi feito um Script em Python porém funciona apenas localmente na máquina do usuário e apenas enquanto o processo estiver em standby no computador em que está executando o Script. 
+## *Para coletar a hora da máquina depois salvar em um arquivo e enviar para o S3 Bucket foi feito um Script em Python porém funciona apenas localmente na máquina do usuário e apenas enquanto o processo estiver em standby no computador em que está executando o Script. 
 
 <h2> Importando as bibliotecas e realizando o acesso SSH </h2>
 
