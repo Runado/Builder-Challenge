@@ -20,10 +20,11 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 <h2>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h2>
 
-provider "aws" { <\n>
+provider "aws" { 
   region = "us-east-1"
   profile = "default"
 }
+
 resource "aws_instance" "ec2-instance" {
   ami = "ami-0574da719dca65348"
   instance_type  = "t2.micro"
@@ -58,18 +59,13 @@ resource "aws_security_group" "security-group-for-builders" {
 	
  <h2>A Chave KMS foi criada para criptografar os objetos do bucket</h2>
   
-
   resource "aws_kms_key" "mykey" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
 }
 
-  
   <h2>Após criar a chave criei o bucket</h2>
   
-  
-    
- 
 resource "aws_s3_bucket" "builder" {
         bucket = "builders-challenge"
         acl = "private"
@@ -83,7 +79,6 @@ resource "aws_s3_bucket" "builder" {
 	days = 30
 	storage_class = "STANDARD_IA"
 	}
-	
 }
 	versioning {
 	enabled = true
@@ -94,9 +89,7 @@ resource "aws_s3_bucket" "builder" {
 
 }
 
-  
 <h2>Para finalizar o provisionamento a máquina foi implementado a criptografia para proteger os objetos do bucket, utilizando a chave KMS criada anteriormente.</h2>
-
 resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" {
   bucket = aws_s3_bucket.builder.bucket
 
