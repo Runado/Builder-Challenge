@@ -18,25 +18,25 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 ## **Resolução**
 
-Para a resolução do desafio foi provisionado uma máquina com recursos básicos.
+<h1>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h1>
 
-<h4> provider "aws" { <\n>
+provider "aws" { <\n>
   region = "us-east-1"
   profile = "default"
 }
-
 resource "aws_instance" "ec2-instance" {
   ami = "ami-0574da719dca65348"
   instance_type  = "t2.micro"
   key_name = "alura_key"
-
 tags = {
   name = "Teste AWS"
 }
 }
-</h4>
 
-Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual
+
+
+<h1>Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual</h1>
+
 
 
 resource "aws_security_group" "security-group-for-builders" {
@@ -56,18 +56,18 @@ resource "aws_security_group" "security-group-for-builders" {
 }
 
 	
- A Chave KMS foi criada para criptografar os objetos do bucket
+ <h1>A Chave KMS foi criada para criptografar os objetos do bucket</h1>
   
-  <h4> 
-    resource "aws_kms_key" "mykey" {
+
+  resource "aws_kms_key" "mykey" {
   description             = "This key is used to encrypt bucket objects"
   deletion_window_in_days = 10
 }
-  </h4>
+
   
-  Após criar a chave criei o bucket
+  <h1>Após criar a chave criei o bucket</h1>
   
-  <h4>
+  
     
  
 resource "aws_s3_bucket" "builder" {
