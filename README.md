@@ -145,8 +145,7 @@ while True: <br>
 	<br>
 	<br>
 	
-	## **  Tentativa que não deu certo 
-	
+##Tentativa que não deu certo 	
 <h2> Tentei cumprir esse desafio utilizando python, shell script e crontab mas sem sucesso devido a um erro que não consegui resolver em tempo ágil, a idéia era apartir de um programa em python acessar a máquina e configurar o crontab para a cada 1 hora,  gravar a saida do comando "date" em um arquivo "horario.txt" depois configurar outra rotina para enviar o arquivo horário.txt através de um shell script que iria se conectar com a API rest da AWS e realizar o upload a cada 1 hora também, deixei abaixo o código fonte do shell script, por algum motivo a execução do shell script não terminava e também não realizava o upload.
 
 
