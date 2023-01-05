@@ -19,14 +19,14 @@ Nesta máquina criada, você deve criar uma aplicação (na linguagem que você 
 
 
 <h2>Para a resolução do desafio foi provisionado uma máquina com recursos básicos.</h2>
+<br>
+provider "aws" {  <br>
+  region = "us-east-1" <br>
+  profile = "default" <br>
+} <br>
 
-provider "aws" { 
-  region = "us-east-1"
-  profile = "default"
-}
-
-resource "aws_instance" "ec2-instance" {
-  ami = "ami-0574da719dca65348"
+resource "aws_instance" "ec2-instance" { <br>
+  ami = "ami-0574da719dca65348" 
   instance_type  = "t2.micro"
   key_name = "alura_key"
 tags = {
