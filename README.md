@@ -26,78 +26,78 @@ provider "aws" {  <br>
 } <br>
 
 resource "aws_instance" "ec2-instance" { <br>
-  ami = "ami-0574da719dca65348" 
-  instance_type  = "t2.micro"
-  key_name = "alura_key"
-tags = {
-  name = "Teste AWS"
-}
-}
+  ami = "ami-0574da719dca65348" <br>
+  instance_type  = "t2.micro" <br>
+  key_name = "alura_key" <br>
+tags = { <br>
+  name = "Teste AWS" <br>
+} <br>
+} <br>
 
 
 
-<h2>Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual</h2>
+<h2>Feito uma regra para habilitar o acesso via SSH na VPC que estava atrelada a Máquina virtual</h2> 
 
 
 
-resource "aws_security_group" "security-group-for-builders" {
-    name = "habilitar-acesso-remoto"
-    description = "Habilitar o acesso remoto "
-    vpc_id = "vpc-00cbad41c1b2cd6f0 "
-    ingress {
-        description = "Allow inbound traffic"
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-    tags = {
-        name = "habilitar_ssh"
-    }
-}
+resource "aws_security_group" "security-group-for-builders" { <br>
+    name = "habilitar-acesso-remoto" <br>
+    description = "Habilitar o acesso remoto " <br>
+    vpc_id = "vpc-00cbad41c1b2cd6f0 " <br>
+    ingress { <br>
+        description = "Allow inbound traffic" <br>
+        from_port = 22 <br>
+        to_port = 22 <br>
+        protocol = "tcp" <br>
+        cidr_blocks = ["0.0.0.0/0"] <br>
+    } <br>
+    tags = { <br>
+        name = "habilitar_ssh" <br>
+    } <br>
+} <br>
 
 	
- <h2>A Chave KMS foi criada para criptografar os objetos do bucket</h2>
+ <h2>A Chave KMS foi criada para criptografar os objetos do bucket</h2> <br>
   
-  resource "aws_kms_key" "mykey" {
-  description             = "This key is used to encrypt bucket objects"
-  deletion_window_in_days = 10
-}
+  resource "aws_kms_key" "mykey" { <br>
+  description             = "This key is used to encrypt bucket objects" <br>
+  deletion_window_in_days = 10 <br>
+} <br>
 
-  <h2>Após criar a chave criei o bucket</h2>
+  <h2>Após criar a chave criei o bucket</h2> <br>
   
-resource "aws_s3_bucket" "builder" {
-        bucket = "builders-challenge"
-        acl = "private"
-        lifecycle_rule {
-	id = "archive"
-	enabled = true
-	transition {
-	days = 30
-	storage_class = "Standard_IA"}
-	transition {
-	days = 30
-	storage_class = "STANDARD_IA"
-	}
-}
-	versioning {
-	enabled = true
-	}
-	tags = {
-	  Enviroment: "QA"
-	}
+resource "aws_s3_bucket" "builder" { <br>
+        bucket = "builders-challenge" <br>
+        acl = "private" <br>
+        lifecycle_rule { <br>
+	id = "archive" <br>
+	enabled = true <br>
+	transition { <br>
+	days = 30 <br>
+	storage_class = "Standard_IA"} <br>
+	transition { <br>
+	days = 30 <br>
+	storage_class = "STANDARD_IA" <br>
+	} <br>
+} <br>
+	versioning { <br>
+	enabled = true <br>
+	} <br>
+	tags = { <br>
+	  Enviroment: "QA" <br>
+	} <br>
 
-}
+} <br>
 
 <h2>Para finalizar o provisionamento a máquina foi implementado a criptografia para proteger os objetos do bucket, utilizando a chave KMS criada anteriormente.</h2>
-resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" {
-  bucket = aws_s3_bucket.builder.bucket
+resource "aws_s3_bucket_server_side_encryption_configuration" "encriptacao" { <br>
+  bucket = aws_s3_bucket.builder.bucket <br>
 
-  rule {
-    apply_server_side_encryption_by_default {
-      kms_master_key_id = aws_kms_key.mykey.arn
-      sse_algorithm     = "aws:kms"
-    }
+  rule { <br>
+    apply_server_side_encryption_by_default { <br>
+      kms_master_key_id = aws_kms_key.mykey.arn <br>
+      sse_algorithm     = "aws:kms" <br>
+    } <br>
   }
   
   
